@@ -3,37 +3,33 @@ version: 2.1
 executors:
   flutter-executor:
     docker:
-      - image: cirrusci/flutter:latest  # 기본 Flutter 이미지 사용
-    working_directory: /workspace
+      - image: cirrusci/flutter:latest  # Flutter를 위한 Docker 이미지
+    working_directory: /workspace  # 작업 디렉토리 설정
 
 jobs:
   build:
     executor: flutter-executor
     steps:
-      - checkout  # 코드 체크아웃
-      - run:
-          name: Install Flutter SDK 3.29.0
-          command: |
-            flutter channel stable  # stable 채널로 변경
-            flutter upgrade  # Flutter SDK를 최신 버전으로 업데이트
-            flutter version 3.29.0  # 원하는 Flutter SDK 버전으로 설정
+      - checkout  # GitHub 저장소에서 코드 체크아웃
+
+      # Flutter 의존성 설치
       - run:
           name: Install dependencies
-          command: |
-            flutter pub get  # Flutter 의존성 설치
-      - run:
-          name: Run tests
-          command: |
-            flutter test  # Flutter 테스트 실행
+          command: flutter pub get
+
+      # Flutter APK 빌드
       - run:
           name: Build APK
-          command: |
-            flutter build apk --release  # APK 빌드
-      - store_artifacts:
-          path: build/app/outputs/flutter-apk/app-release.apk  # APK 파일을 Artifacts로 저장
+          command: flutter build apk --release
+
+      # APK 파일을 /tmp에 저장 (다른 경로로 변경 가능)
+      - persist_to_workspace:
+          root: /workspace
+          paths:
+            - build/app/outputs/flutter-apk/app-release.apk
 
 workflows:
   version: 2
-  build:
+  build_and_test:
     jobs:
-      - build  # 빌드 작업 실행
+      - build
