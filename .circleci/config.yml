@@ -12,6 +12,16 @@ jobs:
     steps:
       - checkout  # GitHub 저장소에서 코드 체크아웃
 
+      # Flutter SDK 버전 3.7.0 강제 설정
+      - run:
+          name: Install Flutter SDK 3.7.0
+          command: |
+            git clone https://github.com/flutter/flutter.git /flutter
+            cd /flutter
+            git checkout 3.7.0  # 원하는 버전 체크아웃
+            export PATH="$PATH:/flutter/bin"
+            flutter doctor  # SDK 상태 확인
+
       # Flutter 의존성 설치
       - run:
           name: Install dependencies
