@@ -3,26 +3,31 @@ version: 2.1
 executors:
   flutter-executor:
     docker:
-      - image: cirrusci/flutter:latest  # 최신 Flutter Docker 이미지 사용
-    working_directory: ~/repo
+      - image: cirrusci/flutter:stable  # Flutter 공식 도커 이미지
+    working_directory: /workspace
 
 jobs:
   build:
     executor: flutter-executor
     steps:
-      - checkout  # Git 저장소에서 소스를 체크아웃
+      - checkout  # 코드 체크아웃
       - run:
-          name: Switch to stable channel
-          command: flutter channel stable  # stable 채널로 변경
+          name: Install dependencies
+          command: |
+            flutter pub get  # Flutter 의존성 설치
       - run:
-          name: Upgrade Flutter
-          command: flutter upgrade  # Flutter 최신 버전으로 업그레이드
+          name: Run tests
+          command: |
+            flutter test  # Flutter 테스트 실행
       - run:
-          name: Flutter pub get
-          command: flutter pub get  # 의존성 설치
+          name: Build APK
+          command: |
+            flutter build apk --release  # APK 빌드
+      - store_artifacts:
+          path: build/app/outputs/flutter-apk/app-release.apk  # APK 파일을 Artifacts로 저장
 
 workflows:
   version: 2
   build:
     jobs:
-      - build
+      - build  # 빌드 작업 실행
