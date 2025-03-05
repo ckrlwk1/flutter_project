@@ -1,22 +1,32 @@
 version: 2.1
 
 executors:
-  android-executor:
+  flutter-executor:
     docker:
-      - image: cimg/android:2023.06
-    working_directory: ~/project
+      - image: cirrusci/flutter:latest  # Flutter가 포함된 CircleCI Docker 이미지
+        environment:
+          FLUTTER_CHANNEL: stable
+    working_directory: ~/flutter_project  # 프로젝트 경로 설정
 
 jobs:
   build:
-    executor: android-executor
+    executor: flutter-executor
     steps:
-      - checkout  # GitHub에서 코드 가져오기
+      - checkout  # GitHub 리포지토리에서 소스 코드 체크아웃
       - run:
-          name: Flutter 의존성 설치
-          command: flutter pub get
+          name: Install dependencies
+          command: |
+            flutter pub get  # 의존성 설치
       - run:
-          name: Flutter 빌드
-          command: flutter build apk --release
+          name: Build APK
+          command: |
+            flutter build apk --release  # 릴리즈 APK 빌드
       - store_artifacts:
-          path: build/app/outputs/flutter-apk/app-release.apk
-          destination: apk
+          path: build/app/outputs/flutter-apk  # 빌드된 APK 경로
+          destination: build_artifacts  # CircleCI 대시보드에서 확인 가능하도록 설정
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build  # 이 워크플로우에서 'build' 작업 실행
