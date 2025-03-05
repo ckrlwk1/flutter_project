@@ -3,7 +3,7 @@ version: 2.1
 executors:
   flutter-executor:
     docker:
-      - image: cirrusci/flutter:stable  # Flutter 공식 도커 이미지
+      - image: cirrusci/flutter:latest  # 기본 Flutter 이미지 사용
     working_directory: /workspace
 
 jobs:
@@ -11,6 +11,12 @@ jobs:
     executor: flutter-executor
     steps:
       - checkout  # 코드 체크아웃
+      - run:
+          name: Install Flutter SDK 3.29.0
+          command: |
+            flutter channel stable  # stable 채널로 변경
+            flutter upgrade  # Flutter SDK를 최신 버전으로 업데이트
+            flutter version 3.29.0  # 원하는 Flutter SDK 버전으로 설정
       - run:
           name: Install dependencies
           command: |
