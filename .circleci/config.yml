@@ -3,7 +3,7 @@ version: 2.1
 executors:
   flutter-executor:
     docker:
-      - image: cirrusci/flutter:latest  # 최신 Flutter 이미지 사용
+      - image: cirrusci/flutter:latest  # 최신 Flutter Docker 이미지 사용
     working_directory: ~/repo
 
 jobs:
@@ -12,11 +12,14 @@ jobs:
     steps:
       - checkout  # Git 저장소에서 소스를 체크아웃
       - run:
-          name: Install Flutter
-          command: flutter upgrade  # Flutter SDK 최신 버전으로 업데이트
+          name: Switch to stable channel
+          command: flutter channel stable  # stable 채널로 변경
+      - run:
+          name: Upgrade Flutter
+          command: flutter upgrade  # Flutter 최신 버전으로 업그레이드
       - run:
           name: Flutter pub get
-          command: flutter pub get  # 'flutter pub get' 명령어 실행
+          command: flutter pub get  # 의존성 설치
 
 workflows:
   version: 2
