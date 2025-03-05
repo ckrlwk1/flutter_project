@@ -1,0 +1,4 @@
+<resources>
+    <!-- 앱 이름 설정 -->
+    <string name="app_name">나의 캘린더 앱</string>  <!-- 한글 앱 이름 -->
+</resources>
