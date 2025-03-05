@@ -1,0 +1,17 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 푸시할 때 실행
+
+jobs:
+  trigger-circleci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CircleCI 트리거
+        run: |
+          curl -X POST "https://circleci.com/api/v2/project/gh/YOUR_GITHUB_USERNAME/flutter_project/pipeline" \
+            -H "Circle-Token: ${{ secrets.CIRCLECI_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"branch":"main"}'

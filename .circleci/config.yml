@@ -1,0 +1,22 @@
+version: 2.1
+
+executors:
+  android-executor:
+    docker:
+      - image: cimg/android:2023.06
+    working_directory: ~/project
+
+jobs:
+  build:
+    executor: android-executor
+    steps:
+      - checkout  # GitHub에서 코드 가져오기
+      - run:
+          name: Flutter 의존성 설치
+          command: flutter pub get
+      - run:
+          name: Flutter 빌드
+          command: flutter build apk --release
+      - store_artifacts:
+          path: build/app/outputs/flutter-apk/app-release.apk
+          destination: apk
