@@ -3,7 +3,7 @@ version: 2.1
 executors:
   flutter-executor:
     docker:
-      - image: cirrusci/flutter:latest  # Flutter를 위한 Docker 이미지
+      - image: cirrusci/flutter:latest  # 최신 Flutter 이미지 사용
     working_directory: /workspace  # 작업 디렉토리 설정
 
 jobs:
@@ -19,8 +19,11 @@ jobs:
             git clone https://github.com/flutter/flutter.git /flutter
             cd /flutter
             git checkout 3.7.0  # 원하는 버전 체크아웃
-            export PATH="$PATH:/flutter/bin"
+            echo 'export PATH="$PATH:/flutter/bin"' >> $BASH_ENV  # 환경 변수 설정
+            source $BASH_ENV  # 환경 변수 적용
             flutter doctor  # SDK 상태 확인
+            flutter --version  # Flutter 버전 확인
+            dart --version  # Dart 버전 확인
 
       # Flutter 의존성 설치
       - run:
