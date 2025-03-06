@@ -18,7 +18,7 @@ jobs:
           command: |
             git clone https://github.com/flutter/flutter.git /flutter
             cd /flutter
-            git checkout 3.7.0  # 원하는 버전 체크아웃
+            git checkout 3.29.0  # 원하는 Flutter 버전 체크아웃
             echo 'export PATH="$PATH:/flutter/bin"' >> $BASH_ENV  # 환경 변수 설정
             source $BASH_ENV  # 환경 변수 적용
             flutter doctor  # SDK 상태 확인
