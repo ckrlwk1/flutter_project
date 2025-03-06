@@ -22,6 +22,7 @@ jobs:
             echo 'export PATH="$PATH:/flutter/bin"' >> $BASH_ENV  # 환경 변수 설정
             source $BASH_ENV  # 환경 변수 적용
             flutter doctor  # SDK 상태 확인
+            flutter channel
             flutter --version  # Flutter 버전 확인
             dart --version  # Dart 버전 확인
 
